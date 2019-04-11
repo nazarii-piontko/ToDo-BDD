@@ -24,7 +24,5 @@ services:
 
   selenium-chrome:
     image: selenium/standalone-chrome
-    volumes:
-      - /dev/shm:/dev/shm
     ports:
       - 4444:4444
