@@ -1,0 +1,18 @@
+dist: xenial
+
+language: python
+
+python:
+  - "3.7"
+
+git:
+  depth: false
+
+services:
+  - docker
+
+install:
+  - pip3 install -r requirements.txt
+
+script:
+  - sh ./tools/docker/entrypoint.sh

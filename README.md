@@ -1,5 +1,7 @@
 ## Sample BDD Tests for Azure-Samples/node-todo web application
 
+[![Build Status](https://travis-ci.com/nazarii-piontko/node-todo-bdd.svg?branch=master)](https://travis-ci.com/nazarii-piontko/node-todo-bdd)
+
 Web application source: https://github.com/Azure-Samples/node-todo
 
 Key points of project:
