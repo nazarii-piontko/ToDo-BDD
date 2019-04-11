@@ -17,3 +17,7 @@ Run with Docker:
 Run with Python
 * `pip3 install behave selenium requests`
 * `behave`
+
+Application work example:
+
+![Application](application.gif)
