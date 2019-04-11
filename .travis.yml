@@ -15,4 +15,5 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - behave
+  - chmod +x ./tools/docker/entrypoint.sh
+  - ./tools/docker/entrypoint.sh
