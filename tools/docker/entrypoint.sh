@@ -4,7 +4,6 @@ set -e
 
 export APP_BASE_URI=http://app.test/
 export SELENIUM_REMOTE=True
-export ARTIFACTS_DIR=/artifacts
 
 if pgrep -x dockerd > /dev/null
 then
