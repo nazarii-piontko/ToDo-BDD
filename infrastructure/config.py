@@ -93,5 +93,5 @@ DEFAULT_CONFIG_VALUES = {
     WellKnownConfigKeys.SELENIUM_REMOTE_URI: 'http://localhost:4444/wd/hub',
     WellKnownConfigKeys.SELENIUM_DRIVER: 'chrome',  # chrome or firefox
     WellKnownConfigKeys.ARTIFACTS_DIR: './artifacts',
-    WellKnownConfigKeys.WAIT_TIMEOUT: '60'
+    WellKnownConfigKeys.WAIT_TIMEOUT: '120'
 }

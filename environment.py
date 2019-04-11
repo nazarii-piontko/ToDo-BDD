@@ -41,9 +41,9 @@ def before_feature(context, feature):
 def before_scenario(context, scenario):
     registry = get_registry(context)
 
-    registry.set(registry.get(WebDriverFactory).create(), RemoteWebDriver)
-
     registry.get(AppController).start()
+
+    registry.set(registry.get(WebDriverFactory).create(), RemoteWebDriver)
 
     for page_type in PAGES:
         registry.set(page_type(registry))
@@ -65,10 +65,10 @@ def after_step(context, step):
 def after_scenario(context, scenario):
     registry = get_registry(context)
 
-    registry.get(AppController).stop()
-
     registry.get(RemoteWebDriver).quit()
     registry.remove(RemoteWebDriver)
+
+    registry.get(AppController).stop()
 
     for page_type in PAGES:
         registry.remove(page_type)

@@ -13,5 +13,5 @@ Run with Docker:
 * `docker run --rm --privileged --name node-todo-bdd node-todo-bdd`
 
 Run with Python
-* pip3 install behave selenium requests
-* behave
+* `pip3 install behave selenium requests`
+* `behave`
