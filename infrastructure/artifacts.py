@@ -2,7 +2,8 @@ from typing import NoReturn
 from os import path, makedirs
 
 from infrastructure.errors import TestError
-from infrastructure.config import Config, WellKnownConfigKeys
+from infrastructure.config import Config
+from infrastructure.config_keys import WellKnownConfigKeys
 
 
 class Artifacts:
@@ -14,16 +15,20 @@ class Artifacts:
         Constructor.
         :param config: Configuration.
         """
-        self.__config = config
-        self.__init_dirs()
+        self._config = config
+        self._init_dirs()
 
     def get_artifacts_dir(self) -> str:
         """
         Get artifacts dir path
         """
-        return self.__config.get(WellKnownConfigKeys.ARTIFACTS_DIR)
+        return self._config.get(WellKnownConfigKeys.ARTIFACTS_DIR)
 
-    def __init_dirs(self) -> NoReturn:
+    def _init_dirs(self) -> NoReturn:
+        """
+        Create artifacts directory if it is missing
+        :return:
+        """
         artifacts_dir = self.get_artifacts_dir()
 
         if artifacts_dir is None:

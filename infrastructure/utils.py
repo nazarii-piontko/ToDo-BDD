@@ -1,24 +1,5 @@
-from typing import Any, NoReturn, Callable
-from infrastructure.di import Registry
+from typing import NoReturn, Callable
 from time import sleep, monotonic_ns
-
-
-def get_registry(context: Any) -> Registry:
-    """
-    Get services registry from behave context.
-    :param context: Behave context.
-    :return: Services registry.
-    """
-    return context.registry
-
-
-def set_registry(context: Any, registry: Registry) -> NoReturn:
-    """
-    Set services registry to behave context.
-    :param context: Behave context.
-    :param registry: Services registry.
-    """
-    context.registry = registry
 
 
 def is_uri_accessible(uri: str) -> bool:

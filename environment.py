@@ -3,13 +3,13 @@ from logging import getLogger
 from behave.log_capture import capture
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 
+from asserts.general import GeneralAssert
+from asserts.html_element import HtmlElementAssert
 from infrastructure.app_controller import AppController
 from infrastructure.artifacts import Artifacts
 from infrastructure.config import Config
-from infrastructure.di import Registry
+from infrastructure.di import Registry, reg, set_registry
 from infrastructure.web_driver_factory import WebDriverFactory
-from infrastructure.utils import get_registry, set_registry
-
 
 # noinspection PyUnusedLocal
 from pages.home_page import HomePage
@@ -17,17 +17,20 @@ from pages.home_page import HomePage
 
 @capture
 def before_all(context):
-    registry = Registry()
+    r = Registry()
     config = Config()
     logger = getLogger()
 
-    registry.set(logger)
-    registry.set(config)
-    registry.set(Artifacts(config))
-    registry.set(WebDriverFactory(config))
-    registry.set(AppController(config, logger))
+    r.set(logger)
+    r.set(config)
+    r.set(Artifacts(config))
+    r.set(WebDriverFactory(config))
+    r.set(AppController(config, logger))
 
-    set_registry(context, registry)
+    r.set(GeneralAssert())
+    r.set(HtmlElementAssert(r[GeneralAssert]))
+
+    set_registry(context, r)
 
 
 # noinspection PyUnusedLocal
@@ -39,14 +42,14 @@ def before_feature(context, feature):
 # noinspection PyUnusedLocal
 @capture
 def before_scenario(context, scenario):
-    registry = get_registry(context)
+    r = reg(context)
 
-    registry.get(AppController).start()
+    r.get(AppController).start()
 
-    registry.set(registry.get(WebDriverFactory).create(), RemoteWebDriver)
+    r.set(r.get(WebDriverFactory).create(), RemoteWebDriver)
 
     for page_type in PAGES:
-        registry.set(page_type(registry))
+        r.set(page_type(r))
 
 # noinspection PyUnusedLocal
 @capture
@@ -63,15 +66,15 @@ def after_step(context, step):
 # noinspection PyUnusedLocal
 @capture
 def after_scenario(context, scenario):
-    registry = get_registry(context)
+    r = reg(context)
 
-    registry.get(RemoteWebDriver).quit()
-    registry.remove(RemoteWebDriver)
+    r.get(RemoteWebDriver).quit()
+    r.remove(RemoteWebDriver)
 
-    registry.get(AppController).stop()
+    r.get(AppController).stop()
 
     for page_type in PAGES:
-        registry.remove(page_type)
+        r.remove(page_type)
 
 
 # noinspection PyUnusedLocal

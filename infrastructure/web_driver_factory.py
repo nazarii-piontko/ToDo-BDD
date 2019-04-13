@@ -3,7 +3,8 @@ from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from sys import platform
 
 from infrastructure.errors import TestError
-from infrastructure.config import Config, WellKnownConfigKeys
+from infrastructure.config import Config
+from infrastructure.config_keys import WellKnownConfigKeys
 from infrastructure.utils import is_uri_accessible, execute_with_retry
 
 
@@ -20,33 +21,37 @@ class WebDriverFactory:
         Constructor.
         :param config: Configuration.
         """
-        self.__config = config
+        self._config = config
 
     def create(self) -> RemoteWebDriver:
         """
-        Create web driver
+        Create web driver.
         """
 
-        if self.__config.get_bool(WellKnownConfigKeys.SELENIUM_REMOTE):
-            return self.__create_remote_driver()
+        if self._config.get_bool(WellKnownConfigKeys.SELENIUM_REMOTE):
+            return self._create_remote_driver()
 
-        driver_type = self.__config.get(WellKnownConfigKeys.SELENIUM_DRIVER)
+        driver_type = self._config.get(WellKnownConfigKeys.SELENIUM_DRIVER)
 
         if driver_type == WebDriverFactory.WEB_DRIVER_TYPE_CHROME:
-            return self.__create_chrome_driver()
+            return self._create_chrome_driver()
 
         if driver_type == WebDriverFactory.WEB_DRIVER_TYPE_FIREFOX:
-            return self.__create_firefox_driver()
+            return self._create_firefox_driver()
 
         raise TestError('Unknown web driver type "{}"'.format(driver_type))
 
-    def __create_remote_driver(self) -> RemoteWebDriver:
-        remote_uri = self.__config.get(WellKnownConfigKeys.SELENIUM_REMOTE_URI)
+    def _create_remote_driver(self) -> RemoteWebDriver:
+        """
+        Create remote driver.
+        :return: web driver.
+        """
+        remote_uri = self._config.get(WellKnownConfigKeys.SELENIUM_REMOTE_URI)
 
         if remote_uri is None:
             raise TestError('{} is missing'.format(WellKnownConfigKeys.SELENIUM_REMOTE_URI))
 
-        driver_type = self.__config.get(WellKnownConfigKeys.SELENIUM_DRIVER)
+        driver_type = self._config.get(WellKnownConfigKeys.SELENIUM_DRIVER)
 
         if driver_type == WebDriverFactory.WEB_DRIVER_TYPE_CHROME:
             desired_capabilities = DesiredCapabilities.CHROME
@@ -56,27 +61,39 @@ class WebDriverFactory:
             raise TestError('Unknown web driver type "{}"'.format(driver_type))
 
         execute_with_retry(lambda: not is_uri_accessible(remote_uri),
-                           timeout=self.__config.get_float(WellKnownConfigKeys.WAIT_TIMEOUT))
+                           timeout=self._config.get_float(WellKnownConfigKeys.WAIT_TIMEOUT))
 
         driver = RemoteWebDriver(command_executor=remote_uri,
                                  desired_capabilities=desired_capabilities)
         return driver
 
-    def __create_chrome_driver(self) -> Chrome:
+    def _create_chrome_driver(self) -> Chrome:
+        """
+        Create chrome driver.
+        :return: web driver.
+        """
         executable_path = './tools/web-drivers-chrome/' \
-                          + self.__get_platform_dependent_driver_name()
+                          + self._get_platform_dependent_driver_name()
 
         driver = Chrome(executable_path=executable_path)
         return driver
 
-    def __create_firefox_driver(self) -> Firefox:
+    def _create_firefox_driver(self) -> Firefox:
+        """
+        Create firefox driver.
+        :return: web driver.
+        """
         executable_path = './tools/web-drivers-gecko/' \
-                          + self.__get_platform_dependent_driver_name()
+                          + self._get_platform_dependent_driver_name()
 
         driver = Firefox(executable_path=executable_path)
         return driver
 
-    def __get_platform_dependent_driver_name(self) -> str:
+    def _get_platform_dependent_driver_name(self) -> str:
+        """
+        Get platform dependent driver name.
+        :return: platform name.
+        """
         if platform == 'linux' or platform == 'linux2':
             return 'linux'
 

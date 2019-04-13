@@ -1,6 +1,8 @@
 from typing import Union
 from os import environ
 
+from infrastructure.config_default import DEFAULT_CONFIG_VALUES
+
 
 class Config:
     """
@@ -65,33 +67,4 @@ class Config:
         :return: Config value as bool.
         """
         value = self.get(key)
-        return value == 'True'
-
-
-class WellKnownConfigKeys:
-    """
-    Well known config keys.
-    """
-    APP_BASE_URI = 'APP_BASE_URI'
-    APP_PROBE_URI = 'APP_PROBE_URI'
-    APP_DOCKER_COMPOSE_FILE = 'APP_DOCKER_COMPOSE_FILE'
-    SELENIUM_REMOTE = 'SELENIUM_REMOTE'
-    SELENIUM_REMOTE_URI = 'SELENIUM_REMOTE_URI'
-    SELENIUM_DRIVER = 'SELENIUM_DRIVER'
-    ARTIFACTS_DIR = 'ARTIFACTS_DIR'
-    WAIT_TIMEOUT = 'WAIT_TIMEOUT'
-
-
-"""
-Default config values.
-"""
-DEFAULT_CONFIG_VALUES = {
-    WellKnownConfigKeys.APP_BASE_URI: 'http://localhost/',
-    WellKnownConfigKeys.APP_PROBE_URI: 'http://localhost/',
-    WellKnownConfigKeys.APP_DOCKER_COMPOSE_FILE: './app/docker-compose.yml',
-    WellKnownConfigKeys.SELENIUM_REMOTE: 'False',
-    WellKnownConfigKeys.SELENIUM_REMOTE_URI: 'http://localhost:4444/wd/hub',
-    WellKnownConfigKeys.SELENIUM_DRIVER: 'chrome',  # chrome or firefox
-    WellKnownConfigKeys.ARTIFACTS_DIR: './artifacts',
-    WellKnownConfigKeys.WAIT_TIMEOUT: '120'
-}
+        return default_value if value is None else value == 'True'
