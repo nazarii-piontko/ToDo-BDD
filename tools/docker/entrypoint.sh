@@ -5,11 +5,8 @@ set -e
 export APP_BASE_URI=http://app.test/
 export SELENIUM_REMOTE=True
 
-if pgrep -x dockerd > /dev/null
+if ! pgrep -x dockerd > /dev/null
 then
-    echo 'Docker daemon is running'
-else
-    echo 'Starting Docker daemon'
     dockerd > /dev/null 2>&1 &
 fi
 

@@ -1,5 +1,5 @@
-from typing import Union
 from os import environ
+from typing import Union
 
 from infrastructure.config_default import DEFAULT_CONFIG_VALUES
 
@@ -68,3 +68,6 @@ class Config:
         """
         value = self.get(key)
         return default_value if value is None else value == 'True'
+
+    def __getitem__(self, key: str) -> Union[str, None]:
+        return self.get(key)

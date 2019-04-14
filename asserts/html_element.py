@@ -23,7 +23,7 @@ class HtmlElementAssert:
         if message is None:
             message = 'HTML element "{}" expected as visible but it is hidden'.format(element)
 
-        self._general_assert.assertTrue(element.is_displayed(), message)
+        self._general_assert.assertTrue(element is not None and element.is_displayed(), message)
 
     def assert_hidden(self,
                       element: WebElement,
@@ -35,4 +35,4 @@ class HtmlElementAssert:
         if message is None:
             message = 'HTML element "{}" expected as hidden but it is visible'.format(element)
 
-        self._general_assert.assertFalse(element.is_displayed(), message)
+        self._general_assert.assertFalse(element is not None and element.is_displayed(), message)

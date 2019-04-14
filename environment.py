@@ -1,6 +1,5 @@
 from logging import getLogger
 
-from behave.log_capture import capture
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 
 from asserts.general import GeneralAssert
@@ -10,12 +9,10 @@ from infrastructure.artifacts import Artifacts
 from infrastructure.config import Config
 from infrastructure.di import Registry, reg, set_registry
 from infrastructure.web_driver_factory import WebDriverFactory
+from pages import PAGES
+
 
 # noinspection PyUnusedLocal
-from pages.home_page import HomePage
-
-
-@capture
 def before_all(context):
     r = Registry()
     config = Config()
@@ -34,13 +31,11 @@ def before_all(context):
 
 
 # noinspection PyUnusedLocal
-@capture
 def before_feature(context, feature):
     pass
 
 
 # noinspection PyUnusedLocal
-@capture
 def before_scenario(context, scenario):
     r = reg(context)
 
@@ -51,20 +46,18 @@ def before_scenario(context, scenario):
     for page_type in PAGES:
         r.set(page_type(r))
 
+
 # noinspection PyUnusedLocal
-@capture
 def before_step(context, step):
     pass
 
 
 # noinspection PyUnusedLocal
-@capture
 def after_step(context, step):
     pass
 
 
 # noinspection PyUnusedLocal
-@capture
 def after_scenario(context, scenario):
     r = reg(context)
 
@@ -78,17 +71,10 @@ def after_scenario(context, scenario):
 
 
 # noinspection PyUnusedLocal
-@capture
 def after_feature(context, feature):
     pass
 
 
 # noinspection PyUnusedLocal
-@capture
 def after_all(context):
     pass
-
-
-PAGES = [
-    HomePage
-]
