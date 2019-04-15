@@ -1,6 +1,7 @@
+from sys import platform
+
 from selenium.webdriver import Chrome, Firefox, DesiredCapabilities
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
-from sys import platform
 
 from infrastructure.errors import TestError
 from infrastructure.config import Config
@@ -27,7 +28,6 @@ class WebDriverFactory:
         """
         Create web driver.
         """
-
         if self._config.get_bool(WellKnownConfigKeys.SELENIUM_REMOTE):
             return self._create_remote_driver()
 
@@ -94,7 +94,7 @@ class WebDriverFactory:
         Get platform dependent driver name.
         :return: platform name.
         """
-        if platform == 'linux' or platform == 'linux2':
+        if platform in ('linux', 'linux2'):
             return 'linux'
 
         if platform == "darwin":

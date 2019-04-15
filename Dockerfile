@@ -117,10 +117,12 @@ RUN set -ex; \
 RUN apk --no-cache add py-pip python-dev libffi-dev openssl-dev gcc libc-dev make && \
     pip --no-cache-dir install docker-compose
 
-# Install python modules
-RUN pip3 --no-cache-dir install behave selenium requests
-
-ADD ./ /bdd
 WORKDIR /bdd
+
+# Install python modules
+ADD requirements.txt ./
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+ADD ./ ./
 
 ENTRYPOINT [ "/bdd/tools/docker/entrypoint.sh" ]

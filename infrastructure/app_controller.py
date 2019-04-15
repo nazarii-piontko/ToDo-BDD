@@ -53,7 +53,7 @@ class AppController:
     def get_uri(self) -> str:
         """
         Get application base URI
-        :return:
+        :return: URI.
         """
         return self._config.get(WellKnownConfigKeys.APP_BASE_URI)
 

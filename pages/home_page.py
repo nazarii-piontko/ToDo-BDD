@@ -53,9 +53,9 @@ class HomePage(Page):
 
     def get_todo_item_by_content(self, todo) -> Union[WebElement, None]:
         elements = self.get_elements_by_css('li.list-group-item > p')
-        for e in elements:
-            if e.text == todo:
-                return self.get_element_parent(e)
+        for element in elements:
+            if element.text == todo:
+                return self.get_element_parent(element)
         return None
 
     def add_todo_item(self, todo) -> NoReturn:
