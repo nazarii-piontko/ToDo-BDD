@@ -31,4 +31,5 @@ Structure:
 
 ---
 Web application work example video:
+
 ![Application](application.gif)
