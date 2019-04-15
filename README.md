@@ -5,7 +5,7 @@
 Web application source code could be found here: https://github.com/Azure-Samples/node-todo
 
 Key technologies used in the project:
-* [Python 3.7+](https://en.wikipedia.org/wiki/Python_(programming_language)
+* [Python 3.7+](https://en.wikipedia.org/wiki/Python_(programming_language))
 * [Gherkin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language)
 * [Behave](https://behave.readthedocs.io/en/latest/)
 * [Selenium](https://selenium-python.readthedocs.io)
@@ -16,7 +16,7 @@ Run with *Docker*:
 * `docker run --rm --privileged --name node-todo-bdd node-todo-bdd`
 
 Run with *python-behave*:
-* Install python3 and pip3
+* Install *python3* and *pip3*
 * `pip3 install -r requirements.txt`
 * `behave`
 
