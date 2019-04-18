@@ -7,6 +7,7 @@ from asserts.html_element import HtmlElementAssert
 from infrastructure.app_controller import AppController
 from infrastructure.artifacts import Artifacts
 from infrastructure.config import Config
+from infrastructure.config_providers import EnvironmentConfigProvider, JsonConfigProvider
 from infrastructure.di import Registry, reg, set_registry
 from infrastructure.web_driver_factory import WebDriverFactory
 from pages import PAGES
@@ -15,7 +16,8 @@ from pages import PAGES
 # noinspection PyUnusedLocal
 def before_all(context):
     r = Registry()
-    config = Config()
+
+    config = Config([EnvironmentConfigProvider(), JsonConfigProvider('./config.json')])
     logger = getLogger()
 
     r.set(logger)

@@ -1,21 +1,20 @@
-from os import environ
-from typing import Union
+from typing import Union, Sequence
 
-from infrastructure.config_default import DEFAULT_CONFIG_VALUES
+from infrastructure.config_providers import ConfigProvider
 
 
 class Config:
     """
     Config class is responsible for providing configurable options for tests
-    Values are provided from environmental or from default values
+    Values are provided from config providers which probe one by one
     """
 
-    def __init__(self, env_prefix: str = ''):
+    def __init__(self, providers: Sequence[ConfigProvider]):
         """
         Config constructor.
-        :param env_prefix: prefix for environmental variable.
+        :param providers: Configuration providers, e.g. env, json file, etc.
         """
-        self.env_prefix = env_prefix
+        self.providers = providers
 
     def get(self, key: str, default_value: Union[str, None] = None) -> Union[str, None]:
         """
@@ -24,20 +23,12 @@ class Config:
         :param default_value: Default value when key is missing.
         :return: Config value as string.
         """
+        for provider in self.providers:
+            value = provider.get(key)
+            if value is not None:
+                return value
 
-        env_key = self.env_prefix + key
-        if env_key in environ:
-            value = environ[env_key]
-        else:
-            value = None
-
-        if value is None:
-            if key in DEFAULT_CONFIG_VALUES:
-                value = DEFAULT_CONFIG_VALUES[key]
-            else:
-                value = default_value
-
-        return value
+        return default_value
 
     def get_int(self, key: str, default_value: Union[int, None] = None) -> Union[int, None]:
         """

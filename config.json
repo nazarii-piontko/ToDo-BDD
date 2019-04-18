@@ -1,0 +1,11 @@
+{
+  "APP_BASE_URI": "http://localhost/",
+  "APP_PROBE_URI": "http://localhost/",
+  "APP_DOCKER_COMPOSE_FILE": "./app/docker-compose.yml",
+  "SELENIUM_REMOTE": false,
+  "SELENIUM_REMOTE_URI": "http://localhost:4444/wd/hub",
+  "SELENIUM_DRIVER": "chrome",
+  "ARTIFACTS_DIR": "./artifacts",
+  "WAIT_TIMEOUT": 120,
+  "HTTP_WAIT_TIMEOUT": 2
+}
