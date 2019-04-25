@@ -4,7 +4,7 @@ from asserts.general import GeneralAssert
 from asserts.html_element import HtmlElementAssert
 from infrastructure.config import Config
 from infrastructure.config_keys import WellKnownConfigKeys
-from infrastructure.di import reg
+from infrastructure.registry import reg
 from infrastructure.utils import execute_with_retry
 from pages.home_page import HomePage
 

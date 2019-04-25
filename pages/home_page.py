@@ -4,7 +4,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from infrastructure.config import Config
 from infrastructure.config_keys import WellKnownConfigKeys
-from infrastructure.di import Registry
+from infrastructure.registry import Registry
 from infrastructure.page import Page
 from infrastructure.utils import execute_with_retry
 

@@ -1,6 +1,6 @@
 from behave import *
 
-from infrastructure.di import reg
+from infrastructure.registry import reg
 from infrastructure.page import Page
 
 use_step_matcher('re')

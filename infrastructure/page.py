@@ -10,7 +10,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from infrastructure.app_controller import AppController
 from infrastructure.artifacts import Artifacts
-from infrastructure.di import Registry
+from infrastructure.registry import Registry
 from infrastructure.errors import TestError
 
 

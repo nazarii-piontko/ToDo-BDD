@@ -8,7 +8,7 @@ from infrastructure.app_controller import AppController
 from infrastructure.artifacts import Artifacts
 from infrastructure.config import Config
 from infrastructure.config_providers import EnvironmentConfigProvider, JsonConfigProvider
-from infrastructure.di import Registry, reg, set_registry
+from infrastructure.registry import Registry, reg, set_registry
 from infrastructure.web_driver_factory import WebDriverFactory
 from pages import PAGES
 
