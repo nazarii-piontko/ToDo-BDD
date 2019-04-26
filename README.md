@@ -1,6 +1,6 @@
 ## Sample BDD Tests for *Azure-Samples/node-todo* web application build in python using behave and selenium frameworks
 
-[![Build Status](https://travis-ci.com/nazarii-piontko/node-todo-bdd.svg?branch=master)](https://travis-ci.com/nazarii-piontko/node-todo-bdd)
+[![Build Status](https://travis-ci.com/nazarii-piontko/ToDo-BDD.svg?branch=master)](https://travis-ci.com/nazarii-piontko/ToDo-BDD)
 
 Web application source code could be found here: https://github.com/Azure-Samples/node-todo
 
