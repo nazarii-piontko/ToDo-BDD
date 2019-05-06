@@ -4,6 +4,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from infrastructure.config import Config
 from infrastructure.config_keys import WellKnownConfigKeys
+from infrastructure.errors import TestError
 from infrastructure.registry import Registry
 from infrastructure.page import Page
 from infrastructure.utils import execute_with_retry
@@ -60,12 +61,14 @@ class HomePage(Page):
 
     def add_todo_item(self, todo) -> NoReturn:
         input_field = self.get_element_by_css('#todoInput')
-        assert input_field is not None, 'Unable to find input for new ToDo item'
+        if input_field is None:
+            raise TestError('Unable to find input for new ToDo item')
 
         input_field.send_keys(todo)
 
         submit_button = self.get_element_by_css('form > div > button')
-        assert submit_button is not None, 'Unable to find submit button to create new ToDo item'
+        if submit_button is None:
+            raise TestError('Unable to find submit button to create new ToDo item')
 
         current_todo_items_count = self.get_todo_items_count()
         
@@ -76,10 +79,12 @@ class HomePage(Page):
 
     def remove_todo_item(self, todo) -> NoReturn:
         todo_element = self.get_todo_item_by_content(todo)
-        assert todo_element is not None, 'ToDo item "{}" is missing'.format(todo)
+        if todo_element is None:
+            raise TestError('ToDo item "{}" is missing'.format(todo))
 
         remove_button = todo_element.find_element_by_xpath('div/button[2]')
-        assert remove_button is not None, 'Remove button for ToDo item "{}" is missing'.format(todo)
+        if remove_button is None:
+            raise TestError('Remove button for ToDo item "{}" is missing'.format(todo))
 
         current_todo_items_count = self.get_todo_items_count()
 
@@ -90,10 +95,12 @@ class HomePage(Page):
 
     def toggle_todo_item_done(self, todo) -> NoReturn:
         todo_element = self.get_todo_item_by_content(todo)
-        assert todo_element is not None, 'ToDo item "{}" is missing'.format(todo)
+        if todo_element is None:
+            raise TestError('ToDo item "{}" is missing'.format(todo))
 
         toggle_button = todo_element.find_element_by_xpath('div/button[1]')
-        assert toggle_button is not None, 'Toggle button for ToDo item "{}" is missing'.format(todo)
+        if toggle_button is None:
+            raise TestError('Toggle button for ToDo item "{}" is missing'.format(todo))
 
         toggle_button.click()
 
@@ -102,7 +109,8 @@ class HomePage(Page):
 
     def is_todo_item_done(self, todo):
         todo_element = self.get_todo_item_by_content(todo)
-        assert todo_element is not None, 'ToDo item "{}" is missing'.format(todo)
+        if todo_element is None:
+            raise TestError('ToDo item "{}" is missing'.format(todo))
 
         toggle_button = todo_element.find_element_by_xpath('div/button[1]')
         toggle_button_class = toggle_button.get_attribute('class')
