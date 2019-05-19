@@ -17,15 +17,13 @@ class Session:
     def get_name(self) -> str:
         """
         Get session name
-        :return: session name
+        :return: Session name
         """
         return self._name
 
     def get_web_driver(self) -> WebDriver:
         """
         Get web driver (browser) associated with session
-        :return: web driver (browser)
+        :return: Web driver (browser)
         """
         return self._web_driver
-
-
