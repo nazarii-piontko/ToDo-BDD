@@ -1,7 +1,7 @@
 from sys import platform
 
 from selenium.webdriver import Chrome, Firefox, DesiredCapabilities
-from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from infrastructure.errors import TestError
 from infrastructure.config import Config
@@ -24,7 +24,7 @@ class WebDriverFactory:
         """
         self._config = config
 
-    def create(self) -> RemoteWebDriver:
+    def create(self) -> WebDriver:
         """
         Create web driver.
         """
@@ -41,7 +41,7 @@ class WebDriverFactory:
 
         raise TestError('Unknown web driver type "{}"'.format(driver_type))
 
-    def _create_remote_driver(self) -> RemoteWebDriver:
+    def _create_remote_driver(self) -> WebDriver:
         """
         Create remote driver.
         :return: web driver.
@@ -63,8 +63,9 @@ class WebDriverFactory:
         execute_with_retry(lambda: not is_uri_accessible(remote_uri),
                            timeout=self._config.get_float(WellKnownConfigKeys.WAIT_TIMEOUT))
 
-        driver = RemoteWebDriver(command_executor=remote_uri,
-                                 desired_capabilities=desired_capabilities)
+        driver = WebDriver(command_executor=remote_uri,
+                           desired_capabilities=desired_capabilities)
+
         return driver
 
     def _create_chrome_driver(self) -> Chrome:

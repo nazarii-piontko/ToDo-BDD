@@ -5,13 +5,15 @@ from typing import NoReturn, Union, Sequence
 from urllib.parse import urljoin
 
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
 from infrastructure.app_controller import AppController
 from infrastructure.artifacts import Artifacts
 from infrastructure.registry import Registry
 from infrastructure.errors import TestError
+from infrastructure.session import Session
+from infrastructure.sessions import Sessions
 
 
 class Page:
@@ -44,7 +46,7 @@ class Page:
         if timeout < 0:
             raise TestError('seconds cannot be less then zero: {}'.format(timeout))
 
-        self._registry[RemoteWebDriver].implicitly_wait(timeout)
+        self._get_driver().implicitly_wait(timeout)
 
     def create_screenshot(self) -> str:
         """
@@ -54,7 +56,7 @@ class Page:
         file_name = 'screenshot-{}.png'.format(datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
         path = path_join(self._registry.get(Artifacts).get_artifacts_dir(), file_name)
 
-        self._registry[RemoteWebDriver].get_screenshot_as_file(path)
+        self._get_driver().get_screenshot_as_file(path)
 
         return path
 
@@ -65,8 +67,7 @@ class Page:
         :return: Web element.
         """
         try:
-            driver = self._registry[RemoteWebDriver]
-            element = driver.find_element_by_css_selector(css_path)
+            element = self._get_driver().find_element_by_css_selector(css_path)
             return element
         except NoSuchElementException:
             return None
@@ -77,8 +78,7 @@ class Page:
         :param css_path: CSS selector.
         :return: Web elements.
         """
-        driver = self._registry[RemoteWebDriver]
-        elements = driver.find_elements_by_css_selector(css_path)
+        elements = self._get_driver().find_elements_by_css_selector(css_path)
         return elements
 
     def get_element_by_xpath(self, xpath: str) -> Union[WebElement, None]:
@@ -88,8 +88,7 @@ class Page:
         :return: Web element.
         """
         try:
-            driver = self._registry[RemoteWebDriver]
-            element = driver.find_element_by_xpath(xpath)
+            element = self._get_driver().find_element_by_xpath(xpath)
             return element
         except NoSuchElementException:
             return None
@@ -100,8 +99,7 @@ class Page:
         :param element: HTML element.
         :return: Parent HTML element.
         """
-        driver = self._registry[RemoteWebDriver]
-        parent = driver.execute_script('return arguments[0].parentNode;', element)
+        parent = self._get_driver().execute_script('return arguments[0].parentNode;', element)
         return parent
 
     def _navigate(self, path) -> NoReturn:
@@ -109,7 +107,7 @@ class Page:
         Navigate to specific page.
         :param path: Path to the page.
         """
-        self._registry[RemoteWebDriver].get(self._get_uri(path))
+        self._get_driver().get(self._get_uri(path))
 
     def _get_uri(self, path: str) -> str:
         """
@@ -119,3 +117,17 @@ class Page:
         app = self._registry.get(AppController)
         uri = urljoin(app.get_uri(), path)
         return uri
+
+    def _get_session(self) -> Session:
+        """
+        Get active session
+        :return:
+        """
+        return self._registry[Sessions].get_session()
+
+    def _get_driver(self) -> WebDriver:
+        """
+        Get active web driver (browser)
+        :return:
+        """
+        return self._get_session().get_web_driver()
