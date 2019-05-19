@@ -6,6 +6,6 @@
   "SELENIUM_REMOTE_URI": "http://localhost:4444/wd/hub",
   "SELENIUM_DRIVER": "chrome",
   "ARTIFACTS_DIR": "./artifacts",
-  "WAIT_TIMEOUT": 120,
+  "WAIT_TIMEOUT": 300,
   "HTTP_WAIT_TIMEOUT": 2
 }

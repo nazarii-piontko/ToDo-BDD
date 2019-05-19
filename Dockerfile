@@ -1,8 +1,14 @@
 FROM docker:dind
 
+# ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
+
+# http://bugs.python.org/issue19846
+# > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
 
+# install ca-certificates so that HTTPS works consistently
+# other runtime dependencies for Python are installed later
 RUN apk add --no-cache ca-certificates
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
@@ -93,7 +99,7 @@ RUN cd /usr/local/bin \
 	&& ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 19.0.3
+ENV PYTHON_PIP_VERSION 19.1.1
 
 RUN set -ex; \
 	\
@@ -114,7 +120,7 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-RUN apk --no-cache add py-pip python-dev libffi-dev openssl-dev gcc libc-dev make && \
+RUN apk --no-cache add libffi-dev openssl-dev gcc libc-dev make && \
     pip --no-cache-dir install docker-compose
 
 WORKDIR /bdd

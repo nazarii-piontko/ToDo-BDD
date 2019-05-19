@@ -1,15 +1,17 @@
 from logging import getLogger
 
-from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
-
 from asserts.general import GeneralAssert
 from asserts.html_element import HtmlElementAssert
+
 from infrastructure.app_controller import AppController
 from infrastructure.artifacts import Artifacts
 from infrastructure.config import Config
 from infrastructure.config_providers import EnvironmentConfigProvider, JsonConfigProvider
 from infrastructure.registry import Registry, reg, set_registry
+from infrastructure.session import Session
+from infrastructure.sessions import Sessions
 from infrastructure.web_driver_factory import WebDriverFactory
+
 from pages import PAGES
 
 
@@ -25,6 +27,7 @@ def before_all(context):
     r.set(Artifacts(config))
     r.set(WebDriverFactory(config))
     r.set(AppController(config, logger))
+    r.set(Sessions())
 
     r.set(GeneralAssert())
     r.set(HtmlElementAssert(r[GeneralAssert]))
@@ -41,9 +44,10 @@ def before_feature(context, feature):
 def before_scenario(context, scenario):
     r = reg(context)
 
-    r.get(AppController).start()
+    r[AppController].start()
 
-    r.set(r.get(WebDriverFactory).create(), RemoteWebDriver)
+    default_session = Session('default', r[WebDriverFactory].create())
+    r[Sessions].add(default_session)
 
     for page_type in PAGES:
         r.set(page_type(r))
@@ -63,8 +67,9 @@ def after_step(context, step):
 def after_scenario(context, scenario):
     r = reg(context)
 
-    r.get(RemoteWebDriver).quit()
-    r.remove(RemoteWebDriver)
+    for session in r[Sessions].get_sessions():
+        session.get_web_driver().quit()
+    r[Sessions].clear()
 
     r.get(AppController).stop()
 
