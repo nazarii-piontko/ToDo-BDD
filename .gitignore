@@ -1,2 +1,5 @@
 .idea/
 artifacts/
+__pycache__/
+
+*.log

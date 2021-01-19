@@ -18,7 +18,7 @@ Run with *Docker*:
 Run with *python-behave*:
 * Install *python3* and *pip3*
 * `pip3 install -r requirements.txt`
-* `behave`
+* `SELENIUM_DRIVER=firefox behave`
 
 Structure:
 * [app/](https://github.com/nazarii-piontko/ToDo-BDD/tree/master/app) - contains docker and/or docker-compose files necessary to start an application under the test.
