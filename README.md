@@ -16,7 +16,9 @@ Run with *Docker*:
 * `docker run --rm --privileged --name node-todo-bdd node-todo-bdd`
 
 Run with *python-behave*:
-* Install *python3* and *pip3*
+* Install *python3*, *pip3* and *virtualenv*
+* `python3 -m venv venv-todo-bdd`
+* `source venv-todo-bdd/bin/activate`
 * `pip3 install -r requirements.txt`
 * `SELENIUM_DRIVER=firefox behave`
 

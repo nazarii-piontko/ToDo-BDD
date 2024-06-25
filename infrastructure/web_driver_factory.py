@@ -1,6 +1,8 @@
+import os
+
 from sys import platform
 
-from selenium.webdriver import Chrome, Firefox, DesiredCapabilities
+from selenium.webdriver import Chrome, ChromeOptions, Firefox, FirefoxOptions
 from selenium.webdriver.remote.webdriver import WebDriver
 
 from infrastructure.errors import TestError
@@ -54,17 +56,16 @@ class WebDriverFactory:
         driver_type = self._config.get(WellKnownConfigKeys.SELENIUM_DRIVER)
 
         if driver_type == WebDriverFactory.WEB_DRIVER_TYPE_CHROME:
-            desired_capabilities = DesiredCapabilities.CHROME
+            options = ChromeOptions()
         elif driver_type == WebDriverFactory.WEB_DRIVER_TYPE_FIREFOX:
-            desired_capabilities = DesiredCapabilities.FIREFOX
+            options = FirefoxOptions()
         else:
             raise TestError('Unknown web driver type "{}"'.format(driver_type))
 
         execute_with_retry(lambda: not is_uri_accessible(remote_uri),
                            timeout=self._config.get_float(WellKnownConfigKeys.WAIT_TIMEOUT))
 
-        driver = WebDriver(command_executor=remote_uri,
-                           desired_capabilities=desired_capabilities)
+        driver = WebDriver(command_executor=remote_uri, options=options)
 
         return driver
 
@@ -73,33 +74,33 @@ class WebDriverFactory:
         Create chrome driver.
         :return: web driver.
         """
-        executable_path = './tools/web-drivers-chrome/' \
-                          + self._get_platform_dependent_driver_name()
+        options = ChromeOptions()
+        options.binary_location = os.path.join('tools',
+                                               'web-drivers-chrome',
+                                               self._get_platform_dependent_driver_name())
 
-        driver = Chrome(executable_path=executable_path)
-        return driver
+        return Chrome(options=options)
 
     def _create_firefox_driver(self) -> Firefox:
         """
         Create firefox driver.
         :return: web driver.
         """
-        executable_path = './tools/web-drivers-gecko/' \
-                          + self._get_platform_dependent_driver_name()
+        options = FirefoxOptions()
+        options.binary_location = os.path.join('tools',
+                                               'web-drivers-gecko',
+                                               self._get_platform_dependent_driver_name())
 
-        driver = Firefox(executable_path=executable_path)
-        return driver
+        return Firefox(options=options)
 
-    def _get_platform_dependent_driver_name(self) -> str:
+    @staticmethod
+    def _get_platform_dependent_driver_name() -> str:
         """
         Get platform dependent driver name.
         :return: platform name.
         """
         if platform in ('linux', 'linux2'):
             return 'linux'
-
-        if platform == "darwin":
-            return 'mac'
 
         if platform == "win32":
             return 'win.exe'

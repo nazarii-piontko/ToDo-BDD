@@ -11,12 +11,12 @@ services:
       - WAIT_HOSTS=db.test:5432
       - PORT=80
     ports:
-      - 80:80
+      - "80:80"
     depends_on:
       - db.test
 
   db.test:
-    image: postgres:latest
+    image: postgres:9
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -24,7 +24,9 @@ services:
 
   selenium-chrome:
     image: selenium/standalone-chrome
+    environment:
+      SE_NODE_GRID_URL: http://selenium-chrome:4444
     volumes:
       - /dev/shm:/dev/shm
     ports:
-      - 4444:4444
+      - "4444:4444"

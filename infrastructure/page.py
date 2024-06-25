@@ -5,6 +5,7 @@ from typing import NoReturn, Union, Sequence
 from urllib.parse import urljoin
 
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -67,7 +68,7 @@ class Page:
         :return: Web element.
         """
         try:
-            element = self._get_driver().find_element_by_css_selector(css_path)
+            element = self._get_driver().find_element(By.CSS_SELECTOR, css_path)
             return element
         except NoSuchElementException:
             return None
@@ -78,7 +79,7 @@ class Page:
         :param css_path: CSS selector.
         :return: Web elements.
         """
-        elements = self._get_driver().find_elements_by_css_selector(css_path)
+        elements = self._get_driver().find_elements(By.CSS_SELECTOR, css_path)
         return elements
 
     def get_element_by_xpath(self, xpath: str) -> Union[WebElement, None]:
@@ -88,7 +89,7 @@ class Page:
         :return: Web element.
         """
         try:
-            element = self._get_driver().find_element_by_xpath(xpath)
+            element = self._get_driver().find_element(By.XPATH, xpath)
             return element
         except NoSuchElementException:
             return None

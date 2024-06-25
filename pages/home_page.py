@@ -1,5 +1,6 @@
 from typing import NoReturn, Union, Sequence
 
+from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from infrastructure.config import Config
@@ -82,7 +83,7 @@ class HomePage(Page):
         if todo_element is None:
             raise TestError('ToDo item "{}" is missing'.format(todo))
 
-        remove_button = todo_element.find_element_by_xpath('div/button[2]')
+        remove_button = todo_element.find_element(By.XPATH, 'div/button[2]')
         if remove_button is None:
             raise TestError('Remove button for ToDo item "{}" is missing'.format(todo))
 
@@ -98,7 +99,7 @@ class HomePage(Page):
         if todo_element is None:
             raise TestError('ToDo item "{}" is missing'.format(todo))
 
-        toggle_button = todo_element.find_element_by_xpath('div/button[1]')
+        toggle_button = todo_element.find_element(By.XPATH, 'div/button[1]')
         if toggle_button is None:
             raise TestError('Toggle button for ToDo item "{}" is missing'.format(todo))
 
@@ -112,6 +113,6 @@ class HomePage(Page):
         if todo_element is None:
             raise TestError('ToDo item "{}" is missing'.format(todo))
 
-        toggle_button = todo_element.find_element_by_xpath('div/button[1]')
+        toggle_button = todo_element.find_element(By.XPATH, 'div/button[1]')
         toggle_button_class = toggle_button.get_attribute('class')
         return 'btn-success' in toggle_button_class
