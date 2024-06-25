@@ -2,7 +2,7 @@ import os
 
 from sys import platform
 
-from selenium.webdriver import Chrome, ChromeOptions, Firefox, FirefoxOptions
+from selenium.webdriver import Chrome, ChromeOptions, ChromeService, Firefox, FirefoxOptions, FirefoxService, Edge, EdgeOptions, EdgeService
 from selenium.webdriver.remote.webdriver import WebDriver
 
 from infrastructure.errors import TestError
@@ -18,6 +18,7 @@ class WebDriverFactory:
 
     WEB_DRIVER_TYPE_CHROME = 'chrome'
     WEB_DRIVER_TYPE_FIREFOX = 'firefox'
+    WEB_DRIVER_TYPE_EDGE = 'edge'
 
     def __init__(self, config: Config):
         """
@@ -41,6 +42,9 @@ class WebDriverFactory:
         if driver_type == WebDriverFactory.WEB_DRIVER_TYPE_FIREFOX:
             return self._create_firefox_driver()
 
+        if driver_type == WebDriverFactory.WEB_DRIVER_TYPE_EDGE:
+            return self._create_edge_driver()
+
         raise TestError('Unknown web driver type "{}"'.format(driver_type))
 
     def _create_remote_driver(self) -> WebDriver:
@@ -59,6 +63,8 @@ class WebDriverFactory:
             options = ChromeOptions()
         elif driver_type == WebDriverFactory.WEB_DRIVER_TYPE_FIREFOX:
             options = FirefoxOptions()
+        elif driver_type == WebDriverFactory.WEB_DRIVER_TYPE_EDGE:
+            options = EdgeOptions()
         else:
             raise TestError('Unknown web driver type "{}"'.format(driver_type))
 
@@ -74,24 +80,37 @@ class WebDriverFactory:
         Create chrome driver.
         :return: web driver.
         """
-        options = ChromeOptions()
-        options.binary_location = os.path.join('tools',
-                                               'web-drivers-chrome',
-                                               self._get_platform_dependent_driver_name())
+        executable_path = os.path.join('tools',
+                                       'web-drivers-chrome',
+                                       self._get_platform_dependent_driver_name())
+        service = ChromeService(executable_path=executable_path)
 
-        return Chrome(options=options)
+        return Chrome(service=service)
 
     def _create_firefox_driver(self) -> Firefox:
         """
         Create firefox driver.
         :return: web driver.
         """
+        executable_path = os.path.join('tools',
+                                       'web-drivers-gecko',
+                                       self._get_platform_dependent_driver_name())
         options = FirefoxOptions()
-        options.binary_location = os.path.join('tools',
-                                               'web-drivers-gecko',
-                                               self._get_platform_dependent_driver_name())
+        options.binary_location = executable_path
 
         return Firefox(options=options)
+
+    def _create_edge_driver(self) -> Edge:
+        """
+        Create edge driver.
+        :return: web driver.
+        """
+        executable_path = os.path.join('tools',
+                                       'web-drivers-edge',
+                                       self._get_platform_dependent_driver_name())
+        service = EdgeService(executable_path=executable_path)
+
+        return Edge(service=service)
 
     @staticmethod
     def _get_platform_dependent_driver_name() -> str:
