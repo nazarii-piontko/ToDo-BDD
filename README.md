@@ -38,4 +38,4 @@ Read more at my blog:
 
 [BDD Part 1](https://www.npiontko.pro/2024/06/24/bdd-1.html)
 
-[BDD Part 2](https://www.npiontko.pro/2024/06/24/bdd-2.html)
+[BDD Part 2](https://www.npiontko.pro/2024/06/30/bdd-2.html)
